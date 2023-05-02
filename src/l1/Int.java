@@ -69,8 +69,7 @@ public class Int {
     public void clearBit(int bit){
         this.original &= ~(1 << bit);
     }
-
-
+    
     @Override
     public String toString(){
         return String.valueOf(this.original);
