@@ -23,37 +23,48 @@ public abstract class AbstractMatrix implements IMatrix {
     public abstract int getElement(int rows, int columns);
 
     public IMatrix sum(IMatrix otherMatrix){
-        if(this.getRows() != otherMatrix.getRows() && this.getColumns() != otherMatrix.getColumns()){
-            throw new IllegalArgumentException("Matrix sizes are not equal");
-        }
-
-        AbstractMatrix resultMatrix = (AbstractMatrix) createMatrix(this.getRows(), this.getColumns());
-
-        for (int i = 0; i < getRows(); i++) {
-            for (int j = 0; j < getColumns(); j++) {
-                resultMatrix.setElement(i,j,this.getElement(i,j) + otherMatrix.getElement(i,j));
+        try {
+            if(this.getRows() != otherMatrix.getRows() && this.getColumns() != otherMatrix.getColumns()){
+                throw new IllegalArgumentException("Matrix sizes are not equal");
             }
+            AbstractMatrix resultMatrix = (AbstractMatrix) createMatrix(this.getRows(), this.getColumns());
+
+            for (int i = 0; i < getRows(); i++) {
+                for (int j = 0; j < getColumns(); j++) {
+                    resultMatrix.setElement(i,j,this.getElement(i,j) + otherMatrix.getElement(i,j));
+                }
+            }
+            return resultMatrix;
+        } catch (Exception ex) {
+            System.err.println("Unexpected error: " + ex.getMessage());
+            ex.printStackTrace();
+            return null;
         }
-        return resultMatrix;
     }
 
-    public IMatrix product(IMatrix otherMatrix){
-        if(this.getColumns() != otherMatrix.getRows()){
-            throw new IllegalArgumentException("Matrix sizes are not equal");
-        }
-
-        AbstractMatrix resultMatrix = (AbstractMatrix) createMatrix(this.getRows(), otherMatrix.getColumns());
-
-        for (int i = 0; i < this.getRows(); i++) {
-            for (int j = 0; j < otherMatrix.getColumns(); j++) {
-                int temp = 0;
-                for (int k = 0; k < this.getColumns(); k++) {
-                    temp += this.getElement(i,k) * otherMatrix.getElement(k,j);
-                }
-                resultMatrix.setElement(i,j,temp);
+    public IMatrix product(IMatrix otherMatrix) {
+        try {
+            if (this.getColumns() != otherMatrix.getRows()) {
+                throw new IllegalArgumentException("Matrix sizes are not equal");
             }
+
+            AbstractMatrix resultMatrix = (AbstractMatrix) createMatrix(this.getRows(), otherMatrix.getColumns());
+
+            for (int i = 0; i < this.getRows(); i++) {
+                for (int j = 0; j < otherMatrix.getColumns(); j++) {
+                    int temp = 0;
+                    for (int k = 0; k < this.getColumns(); k++) {
+                        temp += this.getElement(i, k) * otherMatrix.getElement(k, j);
+                    }
+                    resultMatrix.setElement(i, j, temp);
+                }
+            }
+            return resultMatrix;
+        } catch (Exception ex) {
+            System.err.println("Unexpected error: " + ex.getMessage());
+            ex.printStackTrace();
+            return null;
         }
-        return resultMatrix;
     }
 
 

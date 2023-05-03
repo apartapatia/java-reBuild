@@ -1,8 +1,11 @@
 package l2;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Matrix extends AbstractMatrix {
 
-    public int[][] matrix;
+    private final int[][] matrix;
     public Matrix(int rows, int columns){
         super(rows, columns);
         this.matrix = new int[rows][columns];
@@ -39,13 +42,32 @@ public class Matrix extends AbstractMatrix {
 
         builder.append("Size: ").append(this.rows).append("x").append(this.columns).append('\n');
 
-        for (int i = 0; i < this.getRows(); i++) {
-            for (int j = 0; j < getColumns(); j++) {
-                builder.append(this.getElement(i, j)).append(" ");
-            }
+        for (int[] val : this.matrix){
+            builder.append(Arrays.toString(val)).append(" ");
             builder.append("\n");
         }
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object otherObject){
+
+        if (!(otherObject instanceof Matrix)) {
+            return false;
+        }
+
+        if (this.getColumns() != ((Matrix) otherObject).getColumns() && this.getRows() != ((Matrix) otherObject).getRows()){
+            return false;
+        }
+
+        for (int i = 0; i < this.getRows(); i++) {
+            for (int j = 0; j < this.getColumns(); j++) {
+                if (this.getElement(i,j) != ((Matrix) otherObject).getElement(i,j))
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     public static void main(String[] args) {
@@ -62,7 +84,8 @@ public class Matrix extends AbstractMatrix {
         System.out.println("1 matrix degree: ");
         System.out.println(testMatrix.toString());
 
-        Matrix resultMatrix = testMatrix;
+        Matrix resultMatrix = new Matrix(3);
+        System.out.println(resultMatrix.equals(testMatrix));
         for (int i = 0; i < 9; i++) {
             resultMatrix = resultMatrix.product(testMatrix);
             System.out.println(i + " " + "matrix degree: ");
